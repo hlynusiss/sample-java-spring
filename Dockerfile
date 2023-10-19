@@ -1,13 +1,7 @@
-# builder phase
-FROM node:14-alpine as builder
+FROM tomcat:latest
 
-WORKDIR '/app'
+ADD target/ROOT.war /usr/local/tomcat/webapps/
 
-COPY package.json ./
-RUN npm install
-COPY ./ ./
-RUN npm run build
+EXPOSE 8080
 
-FROM nginx
-EXPOSE 80
-COPY --from=builder /app/build /usr/share/nginx/html
+CMD ["catalina.sh", "run"]
